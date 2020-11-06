@@ -1,14 +1,19 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const authRoute = require('./routes/auth');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // API calls
+app.use('/api/users', authRoute);
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
@@ -30,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 // var createError = require('http-errors');
 // var express = require('express');
