@@ -1,23 +1,17 @@
-import React, {useState} from 'react'
-import { Form, Input, Button, Checkbox, Switch } from 'antd';
+import {NavLink, useHistory} from 'react-router-dom';
+import { Form, Input, Button, Divider } from 'antd';
 import 'antd/dist/antd.css';
 
 const layout = {
-    labelCol: {
-        span: 12,
-    },
-    wrapperCol: {
-        span: 5,
-    },
+    labelCol: { span: 10 },
+    wrapperCol: { span: 4 }
 };
 const tailLayout = {
-    wrapperCol: {
-        offset: 8,
-        span: 12,
-    },
+    wrapperCol: {offset: 7, span: 10}
 };
 
 function Login() {
+    const history = useHistory();
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
@@ -32,8 +26,9 @@ function Login() {
         });
 
         const body = await response.json();
-        console.log(body)
+        console.log(body);
 
+        history.push("/dashboard")
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -41,35 +36,41 @@ function Login() {
     };
 
     return (
-        <Form
-            {...layout}
-            form={form}
-            name="control-hooks"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}>
+        <div>
+            <Form
+                {...layout}
+                form={form}
+                name="control-hooks"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}>
 
-            <Form.Item
-                label="Login"
-                name="mobile_or_email"
-                rules={[ { required: true, message: 'Please input your e-mail!'} ]}>
-                <Input placeholder="E-mail or phone number" />
-            </Form.Item>
+                <Form.Item
+                    label="Login"
+                    name="mobile_or_email"
+                    rules={[ { required: true, message: 'Please input your e-mail!'} ]}>
+                    <Input placeholder="E-mail or phone number" />
+                </Form.Item>
 
-            <Form.Item
-                label="Password"
-                name="password"
-                rules={[ { required: true, message: 'Please input your password!'} ]}>
-                <Input />
-            </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[ { required: true, message: 'Please input your password!'} ]}>
+                    <Input />
+                </Form.Item>
 
 
-            <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-            </Form.Item>
-        </Form>
+                <Form.Item {...tailLayout}>
+                    <Button type="primary" htmlType="submit">
+                        Log in
+                    </Button>
+                </Form.Item>
+            </Form>
+
+            <Divider>Or</Divider>
+
+            <p>Don't have an account? <NavLink to="/registration">Sing up</NavLink></p>
+        </div>
     )
 }
 

@@ -1,60 +1,25 @@
 import React, { Component } from 'react';
+import {Route, Switch, Redirect, BrowserRouter} from 'react-router-dom';
 import Login from './components/Login'
 import Registration from "./components/Registration";
+import Dashboard from "./components/Dashboard";
 
 import './App.css';
 
 class App extends Component {
-    state = {
-        response: '',
-        post: '',
-        responseToPost: '',
-    };
-
-    componentDidMount() {
-        this.callApi()
-            .then(res => this.setState({ response: res.express }))
-            .catch(err => console.log(err));
-    }
-
-    callApi = async () => {
-        const response = await fetch('/api/hello');
-        const body = await response.json();
-        if (response.status !== 200) throw Error(body.message);
-
-        return body;
-    };
-
-    handleSubmit = async e => {
-        e.preventDefault();
-        const response = await fetch('/api/world', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ post: this.state.post }),
-        });
-        const body = await response.text();
-
-        this.setState({ responseToPost: body });
-    };
-
     render() {
         return (
             <div className="App">
-                <Registration/>
-                <Login/>
-                {/*<p>{this.state.response}</p>*/}
-                {/*<form onSubmit={this.handleSubmit}>*/}
-                {/*    <p><strong>Post to Server:</strong></p>*/}
-                {/*    <input*/}
-                {/*    type="text"*/}
-                {/*    value={this.state.post}*/}
-                {/*    onChange={e => this.setState({ post: e.target.value })}*/}
-                {/*    />*/}
-                {/*    <button type="submit">Submit</button>*/}
-                {/*</form>*/}
-                {/*<p>{this.state.responseToPost}</p>*/}
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/"><Login/></Route>
+                        <Route exact path="/registration"><Registration/></Route>
+                        <Route exact path="/dashboard"><Dashboard/></Route>
+
+                        <Route path="/error" render={() => <h1>Not found</h1>}/>
+                        <Redirect to="/error"/>
+                    </Switch>
+                </BrowserRouter>
             </div>
     );
     }
