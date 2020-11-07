@@ -13,7 +13,7 @@ exports.getAll = (req, res) => {
 
 exports.register = async (req, res) => {
     let body = req.body;
-
+    debugger;
     //Hash password
     const salt = await bcrypt.genSalt(10);
     const hasPassword = await bcrypt.hash(body.password, salt);
@@ -23,11 +23,13 @@ exports.register = async (req, res) => {
         mobile : body['mobile'],
         email: body['email'],
         password : hasPassword,
-        status : body['status'] || 1
+        status : body['status'] || 1,
+        userType : body['userType'] || 2
     };
     try {
         const user = await User.create(newUser);
         delete user.dataValues.password;
+        delete user.dataValues.userType;
         res.send(user.dataValues);
     } catch (e) {
         res.status(500).send(e);
@@ -39,12 +41,13 @@ exports.login = async (req, res) => {
     let body = req.body;
     try {
         // Check user exist
+        debugger;
         const user = await User.login(body.mobile_or_email);
         if (user) {
             const validPass = await bcrypt.compare(body.password, user.password);
             if (!validPass) return res.status(400).send("Password is wrong");
             // Create and assign token
-            const token = jwt.sign({id: user.id}, config.TOKEN_SECRET);
+            const token = jwt.sign({id: user.id, user_type_id: user.userType}, config.TOKEN_SECRET);
             res.header("auth-token", token).send({"token": token});
             // res.send("Logged IN");
         } else {
@@ -65,4 +68,14 @@ exports.login = async (req, res) => {
             res.status(500).send("Error retrieving User");
         }
     }
+};
+
+// Access auth users only
+exports.authuseronly = (req, res) => {
+    res.send("Hey,You are authenticated user. So you are authorized to access here.");
+};
+
+// Admin users only
+exports.adminonly = (req, res) => {
+    res.send("Success. Hellow Admin, this route is only for you");
 };

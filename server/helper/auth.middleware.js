@@ -2,7 +2,9 @@ const config = require("../config/config");
 const jwt = require("jsonwebtoken");
 
 exports.loggedIn = function (req, res, next) {
-    let token = req.header('Authorization');
+    let token = req.headers["authorization"];
+    debugger;
+    // let token = req.header('x-auth-token');
     if (!token) return res.status(401).send("Access Denied");
 
     try {
@@ -11,6 +13,7 @@ exports.loggedIn = function (req, res, next) {
             token = token.slice(7, token.length).trimLeft();
         }
         const verified = jwt.verify(token, config.TOKEN_SECRET);
+        console.log(verified);
         if( verified.user_type_id === 2 ){ // Check authorization, 2 = Customer, 1 = Admin
             let req_url = req.baseUrl+req.route.path;
             if(req_url.includes("users/:id") && parseInt(req.params.id) !== verified.id){

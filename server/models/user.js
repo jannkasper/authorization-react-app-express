@@ -21,7 +21,12 @@ const UserModel = sequelize.define("UserModel",{
     status: {
         type: sequelize.Sequelize.INTEGER,
         allowNull: true
-    }
+    },
+    userType: {
+        type: sequelize.Sequelize.INTEGER,
+        allowNull: false
+    },
+
 });
 UserModel.login = mobile_or_email => {
     return UserModel.findAll({
