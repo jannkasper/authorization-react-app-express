@@ -10,7 +10,7 @@ const tailLayout = {
     wrapperCol: {offset: 7, span: 10}
 };
 
-function Login() {
+function Login(props) {
     const history = useHistory();
     const [form] = Form.useForm();
 
@@ -25,8 +25,12 @@ function Login() {
             body: JSON.stringify(values),
         });
 
+        await localStorage.setItem('auth', response.headers.get('auth-token'));
+        props.handleLoggedIn();
+
         const body = await response.json();
         console.log(body);
+
 
         history.push("/dashboard")
     };
@@ -67,7 +71,7 @@ function Login() {
                 </Form.Item>
             </Form>
 
-            <Divider>Or</Divider>
+            <Divider>OR</Divider>
 
             <p>Don't have an account? <NavLink to="/registration">Sing up</NavLink></p>
         </div>

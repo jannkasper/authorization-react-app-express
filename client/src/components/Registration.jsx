@@ -18,7 +18,7 @@ const lastNameCollection = ["Ruth","Jackson", "Debra","Allen", "Gerald","Harris"
     "Carlos","Sanchez", "Ralph","Clark", "Jean","Alexander", "Stephen","Roberts", "Eric","Long", "Amanda","Scott", "Teresa","Diaz", "Wanda","Thomas"];
 
 
-function Registration() {
+function Registration(props) {
     const history = useHistory();
     const [form] = Form.useForm();
 
@@ -32,10 +32,14 @@ function Registration() {
             body: JSON.stringify(values),
         });
 
-        // const body = await response.json();
-        // console.log(body);
+        localStorage.setItem('auth', response.headers.get('auth-token'));
 
-        history.push("/")
+        const body = await response.json();
+        console.log(body);
+
+        props.handleLoggedIn();
+
+        history.push('/dashboard');
     };
 
     const onFinishFailed = (errorInfo) => {

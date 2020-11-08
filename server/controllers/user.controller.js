@@ -13,7 +13,7 @@ exports.getAll = (req, res) => {
 
 exports.register = async (req, res) => {
     let body = req.body;
-    debugger;
+
     //Hash password
     const salt = await bcrypt.genSalt(10);
     const hasPassword = await bcrypt.hash(body.password, salt);
@@ -28,8 +28,14 @@ exports.register = async (req, res) => {
     };
     try {
         const user = await User.create(newUser);
+        const token = jwt.sign({id: user.id, user_type_id: user.userType}, config.TOKEN_SECRET);
+        debugger;
+        res.header("auth-token", token);
+
+        delete user.dataValues.id;
         delete user.dataValues.password;
         delete user.dataValues.userType;
+
         res.send(user.dataValues);
     } catch (e) {
         res.status(500).send(e);
@@ -72,10 +78,12 @@ exports.login = async (req, res) => {
 
 // Access auth users only
 exports.authuseronly = (req, res) => {
+    debugger;
     res.send("Hey,You are authenticated user. So you are authorized to access here.");
 };
 
 // Admin users only
 exports.adminonly = (req, res) => {
+    debugger;
     res.send("Success. Hellow Admin, this route is only for you");
 };
