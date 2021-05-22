@@ -1,3 +1,3 @@
 module.exports = {
-    TOKEN_SECRET: "sE6ret0gfknf"
+    TOKEN_SECRET: process.env.TOKEN_SECRET
 };
