@@ -1,6 +1,6 @@
 ## Authorization JSON Web Token
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/jannkasper/stackoverflow-next/blob/master/screenshot.png)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/jannkasper/authorization-react-app-express/blob/master/screenshot.png)
 
 ## :rocket: Tech Stack
 
